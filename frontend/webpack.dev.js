@@ -63,7 +63,13 @@ module.exports = (env, argv) => {
     devServer: {
       historyApiFallback: true,
       disableHostCheck: true,
-      port: 3000
+      port: 3000,
+      proxy: {
+        '/*': {
+          target: 'http://localhost:8888',
+          changeOrigin: true
+        }
+      }
     }
   };
 };
