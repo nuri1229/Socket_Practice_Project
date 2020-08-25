@@ -17,8 +17,10 @@ export const App: React.FC = () => {
   const deviceContext = useContext(DeviceContext);
   const [device, setDevice] = useState<string>(deviceContext.device);
 
-  const socket = new SockJS("http://localhost:8888/test");
+  const socket = new SockJS("http://localhost:5000/test");
   const stompClient: CompatClient = Stomp.over(socket);
+
+  const subscribedTopic = "/topic/roomLists";
 
   stompClient.debug = (log) => {
     console.log("로그", log);
@@ -30,12 +32,19 @@ export const App: React.FC = () => {
     (frame) => {
       console.log("stomp connected");
       stompClient.subscribe(
-        "/topic/chat",
+        subscribedTopic,
         (message) => {
           console.log("subscribe_message", message);
         },
         {}
       );
+
+      const data = {
+        name: "chatRoomAll",
+        message: "semi"
+      };
+
+      stompClient.send("/app/roomLists", { payload: { name: "111" } }, JSON.stringify(data));
     },
     (error) => {
       console.log("error", error);
