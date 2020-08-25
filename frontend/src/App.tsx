@@ -3,6 +3,7 @@ import { HocAdaptiveRender } from "global/hoc/HocAdaptiveRender";
 import { DeviceContextProvider, DeviceContext } from "global/context";
 import io from "socket.io-client";
 import SockJS from "sockjs-client";
+import { Client, Stomp, CompatClient } from "@stomp/stompjs";
 
 const Desktop: React.FC = () => <h1>Desktop</h1>;
 const Mobile: React.FC = () => <h1>Mobile</h1>;
@@ -17,33 +18,31 @@ export const App: React.FC = () => {
   const [device, setDevice] = useState<string>(deviceContext.device);
 
   const socket = new SockJS("http://localhost:8888/test");
-  socket.onopen = function () {
-    console.log("connected");
+  const stompClient: CompatClient = Stomp.over(socket);
+
+  stompClient.debug = (log) => {
+    console.log("로그", log);
   };
 
-  // const socket = io.connect("ws://localhost:8888", { path: "/test" });
-  // socket.on("connect", function () {
-  //   console.log("connected");
-  // });
-  // socket.on("event", function (data) {});
-  // socket.on("disconnect", function () {
-  //   console.log("disconnect");
-  // });
+  stompClient.connect(
+    "guest",
+    "guest",
+    (frame) => {
+      console.log("stomp connected");
+      stompClient.subscribe(
+        "/topic/chat",
+        (message) => {
+          console.log("subscribe_message", message);
+        },
+        {}
+      );
+    },
+    (error) => {
+      console.log("error", error);
+    }
+  );
 
-  useEffect(() => {
-    // console.log("App_Init", socket.connected);
-    //console.log(socket.connected);
-    // fetch('')
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((res) => {
-    //     console.log('res', res);
-    //   })
-    //   .catch((err) => {
-    //     console.log('err', err);
-    //   });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <DeviceContextProvider device={device} setDevice={setDevice}>
