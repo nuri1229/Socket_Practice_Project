@@ -1,1 +1,1 @@
-import { RouteType } from "global/model";
+export * from "./RouteContainer";

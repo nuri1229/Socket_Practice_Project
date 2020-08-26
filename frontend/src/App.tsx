@@ -4,6 +4,10 @@ import { DeviceContextProvider, DeviceContext } from "global/context";
 import io from "socket.io-client";
 import SockJS from "sockjs-client";
 import { Client, Stomp, CompatClient } from "@stomp/stompjs";
+import { BrowserRouter } from "react-router-dom";
+import { RouteContainer } from "global/route";
+import styled from "styled-components";
+import { GlobalStyle } from "global/layout";
 
 const Desktop: React.FC = () => <h1>Desktop</h1>;
 const Mobile: React.FC = () => <h1>Mobile</h1>;
@@ -55,7 +59,18 @@ export const App: React.FC = () => {
 
   return (
     <DeviceContextProvider device={device} setDevice={setDevice}>
-      <Layout />
+      <GlobalStyle />
+      <MainContainer>
+        <BrowserRouter>
+          <RouteContainer />
+        </BrowserRouter>
+      </MainContainer>
     </DeviceContextProvider>
   );
 };
+
+const MainContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+`;
