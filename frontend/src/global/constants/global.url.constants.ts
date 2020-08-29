@@ -1,3 +1,5 @@
+export const HOST_SERVER = "http://localhost:5000";
+export const SOKECT_CONNECT_URL = `${HOST_SERVER}/test`;
 const SUBSCRIBE_PREFIX = "/topic";
 
 export const SUBSCRIBE_URL: {

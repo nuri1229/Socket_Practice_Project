@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FooterButton } from "global/layout";
 import SockJS from "sockjs-client";
 import { Stomp, CompatClient, Frame, Message, StompSubscription } from "@stomp/stompjs";
-import { SUBSCRIBE_URL, MESSAGE_URL } from "global/constants";
+import { SUBSCRIBE_URL, MESSAGE_URL, SOKECT_CONNECT_URL } from "global/constants";
 
 export const UserListPage: React.FC = () => {
   let socket: WebSocket | null = null;
@@ -30,7 +30,7 @@ export const UserListPage: React.FC = () => {
       console.log("CONNECTED_ERROR", error);
     };
 
-    socket = new SockJS("http://localhost:5000/test");
+    socket = new SockJS(SOKECT_CONNECT_URL);
     stompClient = Stomp.over(socket);
     stompClient.connect("USER_ID", "PASS_CODE", connectSucessCallback, connectErrorCallback);
   };
