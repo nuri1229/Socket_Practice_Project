@@ -7,8 +7,8 @@ import { Switch, Route } from "react-router-dom";
 
 export const RouteContainer: React.FC = () => {
   const routes: RouteType[] = [
-    { name: "room_list", exact: true, path: "/", component: RoomListPage },
-    { name: "user_list", exact: true, path: "/user_list", component: UserListPage },
+    { name: "user_list", exact: true, path: "/", component: UserListPage },
+    { name: "room_list", exact: true, path: "/room_list", component: RoomListPage },
     { name: "chat", exact: true, path: "/chat", component: ChatPage }
   ];
 

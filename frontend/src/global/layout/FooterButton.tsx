@@ -7,10 +7,10 @@ export const FooterButton: React.FC = () => {
     <footer>
       <FooterButtonWrapper>
         <div>
-          <Link to="/">채팅방리스트</Link>
+          <Link to="/">유저</Link>
         </div>
         <div>
-          <Link to="/user_list">유저리스트</Link>
+          <Link to="/room_list">채팅방</Link>
         </div>
         <div>
           <Link to="/chat">채팅</Link>

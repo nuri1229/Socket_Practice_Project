@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FooterButton } from "global/layout";
 
@@ -8,7 +8,7 @@ export const RoomListPage: React.FC = () => {
   return (
     <RoomListPageWrapper>
       <main>
-        <RoomListWrapper>ㅁㅁ</RoomListWrapper>
+        <RoomListWrapper>방목록</RoomListWrapper>
       </main>
       <FooterButton />
     </RoomListPageWrapper>
