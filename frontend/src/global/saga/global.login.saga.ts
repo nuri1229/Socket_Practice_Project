@@ -7,7 +7,10 @@ import { AxiosResponse } from "axios";
 function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) {
   try {
     console.log("call_saga", action);
-    const loginResponse: AxiosResponse<LoginResponseBody> = yield call(login, action.payload);
+
+    const { userId, password } = action.payload;
+    const body = { userId, password };
+    const loginResponse: AxiosResponse<LoginResponseBody> = yield call(login, body);
 
     console.log(loginResponse);
 
@@ -23,3 +26,4 @@ export function* loginActionSaga() {
 }
 
 console.log(11);
+console.log(12);

@@ -9,7 +9,10 @@ export type LoginRequestPayload = {
   successCallback: () => void;
 };
 
-export type LoginRequestBody = LoginRequestPayload;
+export type LoginRequestBody = {
+  userId: string;
+  password: string;
+};
 
 export type LoginSuccessPayload = LoginState;
 
