@@ -4,8 +4,11 @@ import { FooterButton } from "global/layout";
 import SockJS from "sockjs-client";
 import { Stomp, CompatClient, Frame, Message, StompSubscription } from "@stomp/stompjs";
 import { SUBSCRIBE_URL, MESSAGE_URL, SOKECT_CONNECT_URL } from "global/constants";
+import { IsLoggedIn } from "global/hook";
 
 export const UserListPage: React.FC = () => {
+  //const loginState = IsLoggedIn();
+
   let socket: WebSocket | null = null;
   let stompClient: CompatClient | null = null;
   let subscription: StompSubscription | null = null;
@@ -36,7 +39,6 @@ export const UserListPage: React.FC = () => {
   };
 
   const distroy = () => {
-    console.log("DISTROY CALLED");
     if (!stompClient || !subscription) return;
 
     const disconnectCallback = () => {
@@ -50,8 +52,8 @@ export const UserListPage: React.FC = () => {
   };
 
   useEffect(() => {
-    connect();
-    return () => distroy();
+    //connect();
+    //return () => distroy();
   }, []);
 
   return (

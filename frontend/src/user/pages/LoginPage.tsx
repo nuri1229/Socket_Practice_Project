@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { loginActions } from "global/action";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { SocketContext } from "global/context";
 
 export const LoginPage: React.FC = () => {
   const [userId, setUserId] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [pw, setPw] = useState<string>("");
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const socketContext = useContext(SocketContext);
 
   const login = () => {
     const payload = {
       userId,
-      password,
+      pw,
       successCallback: () => {
         history.push("/user_list");
-      }
+      },
+      setSocketObjects: socketContext.setSocketObjects
     };
 
     dispatch(loginActions.request(payload));
@@ -26,11 +29,13 @@ export const LoginPage: React.FC = () => {
   return (
     <LoginPageWrapper>
       <LoginFormWrapper>
-        <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.currentTarget.value)} />
-        <input type="password" placeholder="ID" value={password} onChange={(e) => setPassword(e.currentTarget.value)} />
-        <button type="submit" onClick={login}>
-          LOGIN
-        </button>
+        <form>
+          <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.currentTarget.value)} />
+          <input type="password" placeholder="ID" value={pw} onChange={(e) => setPw(e.currentTarget.value)} autoComplete="off" />
+          <button type="submit" onClick={login}>
+            LOGIN
+          </button>
+        </form>
       </LoginFormWrapper>
     </LoginPageWrapper>
   );
