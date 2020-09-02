@@ -1,57 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import { FooterButton } from "global/layout";
 import SockJS from "sockjs-client";
 import { Stomp, CompatClient, Frame, Message, StompSubscription } from "@stomp/stompjs";
 import { SUBSCRIBE_URL, MESSAGE_URL, SOKECT_CONNECT_URL } from "global/constants";
 import { IsLoggedIn } from "global/hook";
+import { SocketContext } from "global/context";
 
 export const UserListPage: React.FC = () => {
   //const loginState = IsLoggedIn();
 
-  let socket: WebSocket | null = null;
-  let stompClient: CompatClient | null = null;
-  let subscription: StompSubscription | null = null;
+  // let socket: WebSocket | null = null;
+  // let stompClient: CompatClient | null = null;
+  // let subscription: StompSubscription | null = null;
 
-  const connect = () => {
-    const connectSucessCallback = (frame: Frame) => {
-      if (!stompClient) return;
+  // const connect = () => {
+  //   const connectSucessCallback = (frame: Frame) => {
+  //     if (!stompClient) return;
 
-      const receiveMesssageCallback = (message: Message) => {
-        console.log("RECEIVED_MESSAGE", message);
-      };
+  //     const receiveMesssageCallback = (message: Message) => {
+  //       console.log("RECEIVED_MESSAGE", message);
+  //     };
 
-      const subscribeHeader = {};
-      subscription = stompClient.subscribe(SUBSCRIBE_URL.USER, receiveMesssageCallback, subscribeHeader);
+  //     const subscribeHeader = {};
+  //     subscription = stompClient.subscribe(SUBSCRIBE_URL.USER, receiveMesssageCallback, subscribeHeader);
 
-      const sendHeader = {};
-      const sendData = { test: "test" };
-      stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, sendHeader, JSON.stringify(sendData));
-    };
+  //     const sendHeader = {};
+  //     const sendData = { test: "test" };
+  //     stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, sendHeader, JSON.stringify(sendData));
+  //   };
 
-    const connectErrorCallback = (error: Error) => {
-      console.log("CONNECTED_ERROR", error);
-    };
+  //   const connectErrorCallback = (error: Error) => {
+  //     console.log("CONNECTED_ERROR", error);
+  //   };
 
-    socket = new SockJS(SOKECT_CONNECT_URL);
-    stompClient = Stomp.over(socket);
-    stompClient.connect("USER_ID", "PASS_CODE", connectSucessCallback, connectErrorCallback);
-  };
+  //   socket = new SockJS(SOKECT_CONNECT_URL);
+  //   stompClient = Stomp.over(socket);
+  //   stompClient.connect("USER_ID", "PASS_CODE", connectSucessCallback, connectErrorCallback);
+  // };
 
-  const distroy = () => {
-    if (!stompClient || !subscription) return;
+  // const distroy = () => {
+  //   if (!stompClient || !subscription) return;
 
-    const disconnectCallback = () => {
-      console.log("DISCONNECT_SUCCESS");
-    };
+  //   const disconnectCallback = () => {
+  //     console.log("DISCONNECT_SUCCESS");
+  //   };
 
-    const disconnectHeader = {};
+  //   const disconnectHeader = {};
 
-    subscription.unsubscribe();
-    stompClient.disconnect(disconnectCallback, disconnectHeader);
-  };
+  //   subscription.unsubscribe();
+  //   stompClient.disconnect(disconnectCallback, disconnectHeader);
+  // };
+
+  const socketContext = useContext(SocketContext);
 
   useEffect(() => {
+    console.log("=>", socketContext.socketObjects.stompClient?.connected);
     //connect();
     //return () => distroy();
   }, []);

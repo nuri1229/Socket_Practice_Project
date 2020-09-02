@@ -32,9 +32,7 @@ export const LoginPage: React.FC = () => {
         <form>
           <input type="text" placeholder="ID" value={userId} onChange={(e) => setUserId(e.currentTarget.value)} />
           <input type="password" placeholder="ID" value={pw} onChange={(e) => setPw(e.currentTarget.value)} autoComplete="off" />
-          <button type="submit" onClick={login}>
-            LOGIN
-          </button>
+          <input type="button" value="LOGIN" onClick={login}></input>
         </form>
       </LoginFormWrapper>
     </LoginPageWrapper>
