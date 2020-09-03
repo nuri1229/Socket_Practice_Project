@@ -4,23 +4,21 @@ import SockJS from "sockjs-client";
 import { SocketContextObjects } from "global/model"; 
 import { useDispatch } from "react-redux";
 
-export const connectSocket = (authToken: string):Promise<SocketContextObjects> => {
+export const connectSocket = (authToken: string, userSubscribe: any):Promise<SocketContextObjects> => {
 
   return new Promise((resolve, reject) => {
 
     const socket = new SockJS(SOKECT_CONNECT_URL);
     const stompClient = Stomp.over(socket);
     const header = { Authorization: authToken };
-    const dispatch = useDispatch();
 
     stompClient.connect(
       header,
       () => {
-        dispatch("ACTION_TEST");
         resolve({socket, stompClient, subscriptions: {
-          chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, () => {
-            
-          },header),
+          chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, (data) => {
+            userSubscribe(JSON.stringify(data.body));
+          }, header),
           room: null,
           user: null
         }});

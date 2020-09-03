@@ -1,6 +1,6 @@
 export type User = {
     userId: string;
-    useYn: string;
+    useYn: string
     temp01: any;
     user_token: string;
     token_expired_time: Date;
@@ -8,3 +8,4 @@ export type User = {
 }
 
 export type ReceiveUserList = User[];
+export type UserListState = ReceiveUserList;

@@ -1,9 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { loginActions } from "global/action";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "global/context";
+import { userReceiveAction } from "user/action";
+import { User } from "user/model";
 
 export const LoginPage: React.FC = () => {
   const [userId, setUserId] = useState<string>("");
@@ -13,6 +15,19 @@ export const LoginPage: React.FC = () => {
   const history = useHistory();
   const socketContext = useContext(SocketContext);
 
+  useEffect(() => {
+    const test = {
+      userId: "test",
+      useYn: "Y",
+      temp01: {},
+      user_token: "SUPER_USER",
+      token_expired_time: new Date(),
+      created_tiem: new Date(),
+    }
+    dispatch(userReceiveAction([test]));
+  }, []);
+
+
   const login = () => {
     const payload = {
       userId,
@@ -20,7 +35,10 @@ export const LoginPage: React.FC = () => {
       successCallback: () => {
         history.push("/user_list");
       },
-      setSocketObjects: socketContext.setSocketObjects
+      setSocketObjects: socketContext.setSocketObjects,
+      userSubscribe: (userList: User[]) => {
+        dispatch(userReceiveAction(userList));
+      }
     };
 
     dispatch(loginActions.request(payload));

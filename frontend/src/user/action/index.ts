@@ -1,1 +1,1 @@
-export * from "./user.receive.action";
+export * from "./user.list.action";

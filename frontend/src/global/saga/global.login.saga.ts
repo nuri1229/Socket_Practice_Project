@@ -11,10 +11,10 @@ import { connectSocket } from "global/socket";
 
 function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) {
   try {
-    const { userId, pw, setSocketObjects, successCallback } = action.payload;
+    const { userId, pw, setSocketObjects, successCallback, userSubscribe } = action.payload;
     const body = { userId, pw };
     const loginResponse: AxiosResponse<LoginResponseBody> = yield call(login, body);
-    console.log("loginRe", loginResponse);
+    
     const loginSuccessPayload: LoginSuccessPayload = {
       isLoggedIn: true,
       authToken: "SUPER_TOKEN"
@@ -45,7 +45,7 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
     // };
 
     yield put(loginActions.success(loginSuccessPayload));
-    const socketObjects = yield call(connectSocket, "SUPER_TOKEN");
+    const socketObjects = yield call(connectSocket, "SUPER_TOKEN", userSubscribe);
     console.log("socketObejct", socketObjects);
     //yield call(successCallback);
 
