@@ -20,31 +20,8 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
       authToken: loginResponse.data.authToken
     };
 
-    // const connectSocket = (authToken: string) => {
-    //   const socket = new SockJS(SOKECT_CONNECT_URL);
-    //   const stompClient = Stomp.over(socket);
-    //   stompClient.connect(
-    //     { Authorization: authToken },
-    //     () => {
-    //       console.log("SOCKET_CONNECTED_SUCCESS");
-    //       setSocketObjects({
-    //         socket,
-    //         stompClient,
-    //         subscriptions: {
-    //           room: null,
-    //           user: null,
-    //           chat: null,
-    //         }
-    //       });
-    //       successCallback();
-    //     },
-    //     () => {
-    //       console.log("SOCKET_CONNECTED_ERROR");
-    //     }
-    //   );
-    // };
-
     const socketObjects = yield call(connectSocket, loginResponse.data.authToken, userSubscribe);
+    yield call (setSocketObjects, socketObjects);
     yield put(loginActions.success(loginSuccessPayload));
     
     yield call(successCallback);

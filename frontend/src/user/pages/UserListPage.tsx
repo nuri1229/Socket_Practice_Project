@@ -11,9 +11,10 @@ export const UserListPage: React.FC = () => {
   const socketContext = useContext(SocketContext);
   const userList = useSelector(selectUserState).userList;
   const authToken = useSelector(selectLoginState).authToken;
-
+  
   useEffect(() => {
-    socketContext.socketObjects.stompClient!.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
+    console.log("socketContext.socketObjects", socketContext.socketObjects);
+    if(socketContext.socketObjects.stompClient) socketContext.socketObjects.stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
   }, []);
 
   return (

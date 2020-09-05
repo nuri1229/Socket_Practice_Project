@@ -16,15 +16,15 @@ export const LoginPage: React.FC = () => {
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    const test = {
-      userId: "test",
-      useYn: "Y",
-      temp01: {},
-      user_token: "SUPER_USER",
-      token_expired_time: new Date(),
-      created_tiem: new Date(),
-    }
-    dispatch(userReceiveAction([test]));
+    // const test = {
+    //   userId: "test",
+    //   useYn: "Y",
+    //   temp01: {},
+    //   user_token: "SUPER_USER",
+    //   token_expired_time: new Date(),
+    //   created_tiem: new Date(),
+    // }
+    // dispatch(userReceiveAction([test]));
   }, []);
 
 
@@ -33,6 +33,7 @@ export const LoginPage: React.FC = () => {
       userId,
       pw,
       successCallback: () => {
+        
         history.push("/user_list");
       },
       setSocketObjects: socketContext.setSocketObjects,
