@@ -11,6 +11,7 @@ export const connectSocket = (authToken: string, userSubscribe: any):Promise<Soc
     const socket = new SockJS(SOKECT_CONNECT_URL);
     const stompClient = Stomp.over(socket);
     const header = { Authorization: authToken };
+    console.log("authToken", authToken);
 
     stompClient.connect(
       header,

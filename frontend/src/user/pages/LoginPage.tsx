@@ -8,23 +8,15 @@ import { userReceiveAction } from "user/action";
 import { User } from "user/model";
 
 export const LoginPage: React.FC = () => {
-  const [userId, setUserId] = useState<string>("");
-  const [pw, setPw] = useState<string>("");
+  const [userId, setUserId] = useState<string>("hasemi");
+  const [pw, setPw] = useState<string>("1234");
 
   const dispatch = useDispatch();
   const history = useHistory();
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    // const test = {
-    //   userId: "test",
-    //   useYn: "Y",
-    //   temp01: {},
-    //   user_token: "SUPER_USER",
-    //   token_expired_time: new Date(),
-    //   created_tiem: new Date(),
-    // }
-    // dispatch(userReceiveAction([test]));
+
   }, []);
 
 
@@ -33,7 +25,6 @@ export const LoginPage: React.FC = () => {
       userId,
       pw,
       successCallback: () => {
-        
         history.push("/user_list");
       },
       setSocketObjects: socketContext.setSocketObjects,

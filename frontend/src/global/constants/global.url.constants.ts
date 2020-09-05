@@ -18,7 +18,7 @@ const CHAT_MESSAGE_PREFIX = "/chat";
 
 export const MESSAGE_URL = {
   USER: {
-    GET_USER_LIST: `${USER_MESSAGE_PREFIX}/list/get`
+    GET_USER_LIST: `/user/userList/get`
   },
   ROOM: {
     GET_ROOM_LIST: `${ROOM_MESSAGE_PREFIX}/list/get`,
