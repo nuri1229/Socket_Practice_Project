@@ -1,6 +1,6 @@
-import React, { FC, createContext, useEffect } from 'react';
-import _debounce from 'lodash/debounce';
-import { getDeviceType } from 'global/util';
+import React, { FC, createContext, useEffect } from "react";
+import _debounce from "lodash/debounce";
+import { getDeviceType } from "global/util";
 
 type DeviceContextType = {
   device: string;
@@ -26,9 +26,9 @@ export const DeviceContextProvider: FC<DeviceContextProviderProps> = ({ children
       setDevice(getDeviceType());
     }, 100);
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [device, setDevice]);
 
   return <DeviceContext.Provider value={{ device, setDevice }}>{children}</DeviceContext.Provider>;

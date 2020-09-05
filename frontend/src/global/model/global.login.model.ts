@@ -1,3 +1,6 @@
+import { SocketContextObjects } from "./global.socket.model";
+import { User } from "user/model";
+
 export type LoginState = {
   isLoggedIn: boolean;
   authToken: string;
@@ -5,18 +8,19 @@ export type LoginState = {
 
 export type LoginRequestPayload = {
   userId: string;
-  password: string;
+  pw: string;
   successCallback: () => void;
+  setSocketObjects: (socketObjects: SocketContextObjects) => void;
+  userSubscribe: (userList: any) => void;
 };
 
 export type LoginRequestBody = {
   userId: string;
-  password: string;
+  pw: string;
 };
 
 export type LoginSuccessPayload = LoginState;
 
 export type LoginResponseBody = {
-  status: string;
   authToken: string;
 };
