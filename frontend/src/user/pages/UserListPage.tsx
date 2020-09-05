@@ -1,63 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
 import { FooterButton } from "global/layout";
-import SockJS from "sockjs-client";
-import { Stomp, CompatClient, Frame, Message, StompSubscription } from "@stomp/stompjs";
-import { SUBSCRIBE_URL, MESSAGE_URL, SOKECT_CONNECT_URL } from "global/constants";
+import { SocketContext } from "global/context";
+import { useSelector } from "react-redux";
+import { selectUserState, selectLoginState } from "global/selector";
+import { MESSAGE_URL } from "global/constants";
 
 export const UserListPage: React.FC = () => {
-  let socket: WebSocket | null = null;
-  let stompClient: CompatClient | null = null;
-  let subscription: StompSubscription | null = null;
 
-  const connect = () => {
-    const connectSucessCallback = (frame: Frame) => {
-      if (!stompClient) return;
-
-      const receiveMesssageCallback = (message: Message) => {
-        console.log("RECEIVED_MESSAGE", message);
-      };
-
-      const subscribeHeader = {};
-      subscription = stompClient.subscribe(SUBSCRIBE_URL.USER, receiveMesssageCallback, subscribeHeader);
-
-      const sendHeader = {};
-      const sendData = { test: "test" };
-      stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, sendHeader, JSON.stringify(sendData));
-    };
-
-    const connectErrorCallback = (error: Error) => {
-      console.log("CONNECTED_ERROR", error);
-    };
-
-    socket = new SockJS(SOKECT_CONNECT_URL);
-    stompClient = Stomp.over(socket);
-    stompClient.connect("USER_ID", "PASS_CODE", connectSucessCallback, connectErrorCallback);
-  };
-
-  const distroy = () => {
-    console.log("DISTROY CALLED");
-    if (!stompClient || !subscription) return;
-
-    const disconnectCallback = () => {
-      console.log("DISCONNECT_SUCCESS");
-    };
-
-    const disconnectHeader = {};
-
-    subscription.unsubscribe();
-    stompClient.disconnect(disconnectCallback, disconnectHeader);
-  };
+  const socketContext = useContext(SocketContext);
+  const userList = useSelector(selectUserState).userList;
+  const authToken = useSelector(selectLoginState).authToken;
 
   useEffect(() => {
-    connect();
-    return () => distroy();
+    socketContext.socketObjects.stompClient!.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
   }, []);
 
   return (
     <UserListPageWrapper>
       <main>
-        <UserListWrapper>유저목록</UserListWrapper>
+        <UserListWrapper>
+          <ul>
+            {userList.map((user) => {
+              return <li>{user.userId}</li>
+            })}
+          </ul>
+        </UserListWrapper>
         <FooterButton />
       </main>
     </UserListPageWrapper>
