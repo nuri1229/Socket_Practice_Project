@@ -17,7 +17,7 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
     
     const loginSuccessPayload: LoginSuccessPayload = {
       isLoggedIn: true,
-      authToken: "SUPER_TOKEN"
+      authToken: loginResponse.data.authToken
     };
 
     // const connectSocket = (authToken: string) => {
@@ -44,11 +44,10 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
     //   );
     // };
 
+    const socketObjects = yield call(connectSocket, loginResponse.data.authToken, userSubscribe);
     yield put(loginActions.success(loginSuccessPayload));
-    const socketObjects = yield call(connectSocket, "SUPER_TOKEN", userSubscribe);
-    console.log("socketObejct", socketObjects);
-    //yield call(successCallback);
-
+    
+    yield call(successCallback);
     
   } catch (error) {
     alert("error");
