@@ -10,6 +10,3 @@ const options = {
 
 export const login = (body: LoginRequestBody): Promise<AxiosResponse<LoginResponseBody>> =>
   HTTP.post<LoginRequestBody, LoginResponseBody>(`/api/login`, body, options);
-
-console.log("22");
-console.log("333");
