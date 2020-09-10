@@ -11,14 +11,15 @@ export const connectSocket = (authToken: string, userSubscribe: any):Promise<Soc
     const socket = new SockJS(SOKECT_CONNECT_URL);
     const stompClient = Stomp.over(socket);
     const header = { Authorization: authToken };
-    console.log("authToken", authToken);
 
     stompClient.connect(
       header,
-      () => {
+      (res) => {
+        console.log("res", res);
         resolve({socket, stompClient, subscriptions: {
-          chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, (data) => {
-            userSubscribe(JSON.stringify(data.body));
+          chat: stompClient.subscribe(SUBSCRIBE_URL.USER, (data) => {
+            console.log("data", data);
+            userSubscribe(JSON.parse(data.body));
           }, header),
           room: null,
           user: null
