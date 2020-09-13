@@ -2,18 +2,19 @@ package com.chat.realtime.service;
 
 import com.chat.realtime.domain.user.User;
 import com.chat.realtime.domain.user.UserRepository;
+import com.chat.realtime.web.dto.UserListResponseDto;
 import com.chat.realtime.web.dto.UserSaveRequestDto;
 import com.chat.realtime.web.dto.UserSaveResponseDto;
+import com.chat.realtime.web.dto.type.DataType;
+import com.chat.realtime.web.exception.CommonException;
 import com.chat.realtime.web.util.JwtUtil;
 import com.chat.realtime.web.util.SHA256Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Slf4j
@@ -28,10 +29,17 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserSaveResponseDto login(UserSaveRequestDto requestDto) throws Exception {
+    public UserSaveResponseDto login(UserSaveRequestDto requestDto) {
 
         String userId = requestDto.getUserId();
-        String password = sha256Util.getEncrypt(requestDto.getPw());
+        String password;
+
+        try {
+            password = sha256Util.getEncrypt(requestDto.getPw());
+        } catch (NoSuchAlgorithmException ex) {
+            throw new CommonException(500, "비밀번호 암호화 중 에러 발생");
+        }
+
         String newToken = jwtUtil.createToken(userId);
 
         Optional<User> loginUser = userRepository.findByUserIdAndPassword(userId, password);
@@ -39,7 +47,7 @@ public class UserService {
             loginUser.get().update(newToken, jwtUtil.getExpiredTime(newToken));
             return new UserSaveResponseDto(loginUser.get());
         } else if (isJoinedUser(userId)) {
-            throw new IllegalArgumentException("비밀번호를 확인해주세요.");
+            throw new CommonException(401, "비밀번호 확인");
         } else {
             return new UserSaveResponseDto(
                     userRepository.save(
@@ -51,6 +59,13 @@ public class UserService {
                                     .build().toEntity())
             );
         }
+    }
+
+    public UserListResponseDto findAll() {
+        return UserListResponseDto.builder()
+                .dataType(DataType.CONNECTED_USER_LIST.getDataType())
+                .users(userRepository.findAll())
+                .build();
     }
 
     private boolean isJoinedUser(String userId) {
