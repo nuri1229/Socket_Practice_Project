@@ -9,7 +9,7 @@
 **/coverage
 
 # production
-**//dist
+**/dist
 
 # debug log
 **/npm-debug.log*
