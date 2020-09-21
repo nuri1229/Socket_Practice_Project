@@ -5,18 +5,32 @@ import { SocketContext } from "global/context";
 import { useSelector } from "react-redux";
 import { selectUserState, selectLoginState } from "global/selector";
 import { SUBSCRIBE_URL, MESSAGE_URL } from "global/constants";
+import { connectSocket } from "global/socket";
+import { UserReceiveMessage } from "global/model"
+import { useDispatch } from "react-redux";
+import { userReceiveAction } from "user/action";
 
 export const UserListPage: React.FC = () => {
 
   const socketContext = useContext(SocketContext);
   const userList = useSelector(selectUserState).userList;
   const authToken = useSelector(selectLoginState).authToken;
+  const dispatch = useDispatch();
 
+  const userSubscribe = (receiveMessage: UserReceiveMessage) => {
+        
+    if (receiveMessage.dataType === "CONNECTED_USER_LIST") dispatch(userReceiveAction(receiveMessage.data));
+    
+  }
+
+  
   useEffect(() => {
 
     if(socketContext.socketObjects.stompClient) {
       socketContext.socketObjects.stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
-    };
+    } else {
+      connectSocket("SUPER_TOKEN", "SUPER_TOKEN", userSubscribe);
+    }
 
   }, []);
 
@@ -26,7 +40,7 @@ export const UserListPage: React.FC = () => {
         <UserListWrapper>
           <ul>
             {userList.map((user) => {
-              return <li key={user.user_token}>{user.userId}</li>
+              return <li key={user.user_token}>{JSON.stringify(user)}</li>
             })}
           </ul>
         </UserListWrapper>

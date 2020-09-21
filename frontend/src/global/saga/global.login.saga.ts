@@ -17,10 +17,11 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
     
     const loginSuccessPayload: LoginSuccessPayload = {
       isLoggedIn: true,
-      authToken: loginResponse.data.authToken
+      authToken: loginResponse.data.authToken,
+      connectToken: loginResponse.data.connectToken
     };
 
-    const socketObjects = yield call(connectSocket, loginResponse.data.authToken, userSubscribe);
+    const socketObjects = yield call(connectSocket, loginResponse.data.authToken, loginResponse.data.connectToken, userSubscribe);
     yield call (setSocketObjects, socketObjects);
     yield put(loginActions.success(loginSuccessPayload));
     
