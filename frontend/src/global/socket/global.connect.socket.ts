@@ -17,12 +17,17 @@ export const connectSocket = (authToken: string, connectToken:string ,userSubscr
       (res) => {
         
         resolve({socket, stompClient, subscriptions: {
-          chat: stompClient.subscribe(SUBSCRIBE_URL.USER, (data) => {
-            
+          chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, (data) => {
+            console.log("채팅 메시지 구독중", data);
             userSubscribe(JSON.parse(data.body));
           }, header),
-          room: null,
-          user: null
+          room: stompClient.subscribe(SUBSCRIBE_URL.ROOM, (data) => {
+            console.log("룸메시지 구독 중", data);
+          }, header),
+          user: stompClient.subscribe(SUBSCRIBE_URL.USER, (data) => {
+            console.log("유저메시지 구독 중", data);
+            userSubscribe(JSON.parse(data.body));
+          }, header),
         }});
       },
       () => {
