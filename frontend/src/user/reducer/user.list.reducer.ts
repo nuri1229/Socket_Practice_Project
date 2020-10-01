@@ -6,5 +6,7 @@ const initState: UserListState = [];
 
 export const userListState = createReducer<UserListState, UserReceiveAction>(initState)
 .handleAction(userReceiveAction, (_, action) => {
+  
   return [...action.payload];
+
 });

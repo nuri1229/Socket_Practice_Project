@@ -4,6 +4,7 @@ import { User } from "user/model";
 export type LoginState = {
   isLoggedIn: boolean;
   authToken: string;
+  connectToken:string;
 };
 
 export type LoginRequestPayload = {
@@ -23,4 +24,5 @@ export type LoginSuccessPayload = LoginState;
 
 export type LoginResponseBody = {
   authToken: string;
+  connectToken: string;
 };

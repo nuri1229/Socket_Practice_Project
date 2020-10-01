@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { SocketContext } from "global/context";
 import { userReceiveAction } from "user/action";
 import { User } from "user/model";
+import { UserReceiveMessage } from "global/model"
 
 export const LoginPage: React.FC = () => {
   const [userId, setUserId] = useState<string>("hasemi");
@@ -28,8 +29,10 @@ export const LoginPage: React.FC = () => {
         history.push("/user_list");
       },
       setSocketObjects: socketContext.setSocketObjects,
-      userSubscribe: (userList: User[]) => {
-        dispatch(userReceiveAction(userList));
+      userSubscribe: (receiveMessage: UserReceiveMessage) => {
+        
+        if (receiveMessage.dataType === "CONNECTED_USER_LIST") dispatch(userReceiveAction(receiveMessage.data));
+        
       }
     };
 

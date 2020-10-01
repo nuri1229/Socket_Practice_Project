@@ -10,15 +10,12 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.util.MultiValueMap;
-
-import java.util.List;
 
 @Slf4j
 public class FilterChannelInterceptor implements ChannelInterceptor {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+//    @Autowired
+//    JwtUtil jwtUtil;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -30,29 +27,26 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
 
         if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
             log.info("CONNECT ==================================");
-            log.info("auth:" + headerAccessor.getNativeHeader("Authorization"));
-            MultiValueMap<String, String> multiValueMap = headers.get(StompHeaderAccessor.NATIVE_HEADERS, MultiValueMap.class);
-
-            List<String> list = (List<String>) multiValueMap.get("Authorization");
-            String token = list.get(0);
-
-            // TODO: 2020-09-09 개발 임시 삭제 예정
-            if ("SUPER_TOKEN".equals(token)) {
-                return message;
-            }
-
-            if (!jwtUtil.isValidToken(token)) {
-                throw new CommonException(401, "유효한 토큰이 아닙니다.");
-            }
+//            String token = headerAccessor.getFirstNativeHeader("Authorization");
+//            log.info("Authorization Token : " + token);
+//
+//            if ("SUPER_TOKEN".equals(token)) {
+//                return message;
+//                // TODO: 2020-09-09 개발 임시 삭제 예정
+//            }
+//
+//            if (!jwtUtil.isValidToken(token)) {
+//                throw new CommonException(401, "유효한 토큰이 아닙니다.");
+//            }
 
         } else if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
             log.info("SUBSCRIBE ==================================");
         } else if (StompCommand.SEND.equals(headerAccessor.getCommand())) {
             log.info("SEND ==================================");
+
         } else if (StompCommand.DISCONNECT.equals(headerAccessor.getCommand())) {
             log.info("DISCONNECT ==================================");
         }
-
 
         return message;
     }

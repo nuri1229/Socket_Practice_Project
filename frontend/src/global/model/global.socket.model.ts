@@ -1,4 +1,5 @@
 import { CompatClient, StompSubscription } from "@stomp/stompjs";
+import { User } from "user/model";
 
 export type SocketContextObjects = {
   socket: WebSocket | null;
@@ -9,3 +10,8 @@ export type SocketContextObjects = {
     user: StompSubscription | null;
   };
 };
+
+export type UserReceiveMessage = {
+  dataType: string;
+  data: User[];
+}
