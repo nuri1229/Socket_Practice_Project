@@ -21,6 +21,11 @@ export const connectSocket = (
     stompClient.connect(
       header,
       (res) => {
+
+        stompClient.subscribe(`/user${SUBSCRIBE_URL.ROOM}`, (data) => {
+          console.log("다이렉트메시지=======>");
+          console.log("data", data);
+        })
         
         resolve({socket, stompClient, subscriptions: {
           chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, (data) => {
@@ -33,7 +38,6 @@ export const connectSocket = (
           }, header),
           user: stompClient.subscribe(SUBSCRIBE_URL.USER, (data) => {
             console.log("유저메시지 구독 중", JSON.parse(data.body));
-            
             userSubscribe(JSON.parse(data.body));
           }, header),
         }});
