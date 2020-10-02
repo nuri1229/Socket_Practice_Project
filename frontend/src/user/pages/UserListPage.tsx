@@ -20,24 +20,17 @@ export const UserListPage: React.FC = () => {
   const dummy:User[] = [{
     userId: "유저아이디",
     useYn: "Y",
-    user_token: "AAAAAAAAAAA",
-    token_expired_time: "2020.1 0.10",
+    userToken: "AAAAAAAAAAA",
+    tokenExpiredTime: "2020.1 0.10",
     userPk:"111111",
-    created_time: "2020.10.10",
+    createdTime: "2020.10.10",
   }, {
     userId: "유저아이디",
     useYn: "Y",
-    user_token: "AAAAAAAAAAA",
-    token_expired_time: "2020.10.10",
+    userToken: "AAAAAAAAAAA",
+    tokenExpiredTime: "2020.10.10",
     userPk:"45454",
-    created_time: "2020.10.10",
-  }, {
-    userId: "유저아이디",
-    useYn: "Y",
-    user_token: "AAAAAAAAAAA",
-    token_expired_time: "2020.10.10",
-    userPk:"1321",
-    created_time: "2020.10.10",
+    createdTime: "2020.10.10",
   }]
 
   const socketContext = useContext(SocketContext);
@@ -57,10 +50,11 @@ export const UserListPage: React.FC = () => {
   const userOnClickHandler = (user: User) => {
 
     if(socketContext.socketObjects.stompClient) {
-
+      console.log("authToken", authToken);
       const header = {"AUTHORIZATION": authToken};
-      const body = {"receive": user.user_token};
-
+      
+      const body = {"receiver": user.userToken};
+      console.log("body", body);
       socketContext.socketObjects.stompClient.send(MESSAGE_URL.ROOM.ADD_ROOM, header ,JSON.stringify(body));
     } else {
       console.log("소켓 연결이 올바르지 않습니다.");

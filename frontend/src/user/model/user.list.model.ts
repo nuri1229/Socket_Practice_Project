@@ -2,9 +2,9 @@ export type User = {
     userId: string;
     useYn: string
     temp01?: any;
-    user_token: string;
-    token_expired_time: string;
-    created_time: string;
+    userToken: string;
+    tokenExpiredTime: string;
+    createdTime: string;
     userPk: string;
 }
 
