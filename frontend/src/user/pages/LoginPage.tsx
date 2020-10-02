@@ -29,10 +29,14 @@ export const LoginPage: React.FC = () => {
         history.push("/user_list");
       },
       setSocketObjects: socketContext.setSocketObjects,
-      userSubscribe: (receiveMessage: UserReceiveMessage) => {
-        
+      userSubscribe: (receiveMessage: UserReceiveMessage) => {        
         if (receiveMessage.dataType === "CONNECTED_USER_LIST") dispatch(userReceiveAction(receiveMessage.data));
-        
+      },
+      roomSubscribe: (receiveMessage: any) => {
+        console.log("roomReceive", receiveMessage.data);
+      },
+      chatSubscribe: (receiveMessage: any) => {
+        console.log("chatMessage", receiveMessage.data);
       }
     };
 

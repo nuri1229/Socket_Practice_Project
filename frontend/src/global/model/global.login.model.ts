@@ -12,7 +12,9 @@ export type LoginRequestPayload = {
   pw: string;
   successCallback: () => void;
   setSocketObjects: (socketObjects: SocketContextObjects) => void;
-  userSubscribe: (userList: any) => void;
+  userSubscribe: (...args: any[]) => void;
+  roomSubscribe: (...args: any[]) => void;
+  chatSubscribe: (...args: any[]) => void;
 };
 
 export type LoginRequestBody = {

@@ -11,7 +11,14 @@ import { connectSocket } from "global/socket";
 
 function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) {
   try {
-    const { userId, pw, setSocketObjects, successCallback, userSubscribe } = action.payload;
+    const { userId, 
+            pw, 
+            setSocketObjects, 
+            successCallback, 
+            userSubscribe,
+            roomSubscribe,
+            chatSubscribe
+           } = action.payload;
     const body = { userId, pw };
     const loginResponse: AxiosResponse<LoginResponseBody> = yield call(login, body);
     
@@ -21,7 +28,14 @@ function* asyncLoginActionSaga(action: ReturnType<typeof loginActions.request>) 
       connectToken: loginResponse.data.connectToken
     };
 
-    const socketObjects = yield call(connectSocket, loginResponse.data.authToken, loginResponse.data.connectToken, userSubscribe);
+    const socketObjects = yield call(
+      connectSocket, 
+      loginResponse.data.authToken, 
+      loginResponse.data.connectToken, 
+      userSubscribe,
+      roomSubscribe,
+      chatSubscribe
+      );
     yield call (setSocketObjects, socketObjects);
     yield put(loginActions.success(loginSuccessPayload));
     

@@ -10,6 +10,8 @@ import { UserReceiveMessage } from "global/model"
 import { useDispatch } from "react-redux";
 import { userReceiveAction } from "user/action";
 import { User } from "user/model";
+import { useHistory } from "react-router-dom";
+import { loginActions } from "global/action";
 
 
 export const UserListPage: React.FC = () => {
@@ -43,6 +45,7 @@ export const UserListPage: React.FC = () => {
   //const userList = dummy;
   const authToken = useSelector(selectLoginState).authToken;
   const dispatch = useDispatch();
+  const history = useHistory();
 
 
   const userSubscribe = (receiveMessage: UserReceiveMessage) => {
@@ -56,7 +59,7 @@ export const UserListPage: React.FC = () => {
     if(socketContext.socketObjects.stompClient) {
 
       const header = {"AUTHORIZATION": authToken};
-      const body = {"receive": user.userPk};
+      const body = {"receive": user.user_token};
 
       socketContext.socketObjects.stompClient.send(MESSAGE_URL.ROOM.ADD_ROOM, header ,JSON.stringify(body));
     } else {
@@ -66,17 +69,34 @@ export const UserListPage: React.FC = () => {
   }
   
   useEffect(() => {
-
+    console.log("useEffect");
     if(socketContext.socketObjects.stompClient) {
       socketContext.socketObjects.stompClient.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
     } else {
       
-      connectSocket("SUPER_TOKEN", "SUPER_TOKEN", userSubscribe).then(() => {
-        socketContext.socketObjects.stompClient!.send(MESSAGE_URL.USER.GET_USER_LIST, {"Authorization": authToken});
-      })
+      const payload = {
+        userId: "hasemi",
+        pw: "1234",
+        successCallback: () => {
+          history.push("/user_list");
+        },
+        setSocketObjects: socketContext.setSocketObjects,
+        userSubscribe: (receiveMessage: UserReceiveMessage) => {        
+          if (receiveMessage.dataType === "CONNECTED_USER_LIST") dispatch(userReceiveAction(receiveMessage.data));
+        },
+        roomSubscribe: (receiveMessage: any) => {
+          console.log("roomReceive", receiveMessage.data);
+        },
+        chatSubscribe: (receiveMessage: any) => {
+          console.log("chatMessage", receiveMessage.data);
+        }
+      };
+  
+      dispatch(loginActions.request(payload));
     }
 
-  }, []);
+  }, [socketContext]);
+
 
   return (
     <UserListPageWrapper>

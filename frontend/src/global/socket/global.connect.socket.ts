@@ -4,7 +4,13 @@ import SockJS from "sockjs-client";
 import { SocketContextObjects } from "global/model"; 
 import { useDispatch } from "react-redux";
 
-export const connectSocket = (authToken: string, connectToken:string ,userSubscribe: any):Promise<SocketContextObjects> => {
+export const connectSocket = (
+  authToken: string, 
+  connectToken:string ,
+  userSubscribe: (...args: any[]) => void, 
+  roomSubscribe: (...args: any[]) => void, 
+  chatSubscribe: (...args: any[]) => void
+  ):Promise<SocketContextObjects> => {
 
   return new Promise((resolve, reject) => {
 
@@ -18,14 +24,16 @@ export const connectSocket = (authToken: string, connectToken:string ,userSubscr
         
         resolve({socket, stompClient, subscriptions: {
           chat: stompClient.subscribe(SUBSCRIBE_URL.CHAT, (data) => {
-            console.log("채팅 메시지 구독중", data);
-            userSubscribe(JSON.parse(data.body));
+            console.log("챗메시지 구독 중", data);
+            chatSubscribe(data.body);
           }, header),
           room: stompClient.subscribe(SUBSCRIBE_URL.ROOM, (data) => {
             console.log("룸메시지 구독 중", data);
+            roomSubscribe(data.body);
           }, header),
           user: stompClient.subscribe(SUBSCRIBE_URL.USER, (data) => {
-            console.log("유저메시지 구독 중", data);
+            console.log("유저메시지 구독 중", JSON.parse(data.body));
+            
             userSubscribe(JSON.parse(data.body));
           }, header),
         }});
