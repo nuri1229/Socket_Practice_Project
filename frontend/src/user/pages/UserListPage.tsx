@@ -51,7 +51,7 @@ export const UserListPage: React.FC = () => {
 
     if(socketContext.socketObjects.stompClient) {
       console.log("authToken", authToken);
-      const header = {"AUTHORIZATION": authToken};
+      const header = {"Authorization": authToken};
       
       const body = {"receiver": user.userToken};
       console.log("body", body);
