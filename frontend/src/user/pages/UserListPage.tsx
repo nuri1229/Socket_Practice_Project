@@ -54,7 +54,7 @@ export const UserListPage: React.FC = () => {
       console.log("authToken", authToken);
       const header = {"Authorization": authToken};
       
-      const body = {"receiver": user.userToken};
+      const body = {"receiver": user.userId};
       console.log("body", body);
       socketContext.socketObjects.stompClient.send(MESSAGE_URL.ROOM.ADD_ROOM, header ,JSON.stringify(body));
     } else {
