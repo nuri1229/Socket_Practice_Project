@@ -50,6 +50,7 @@ export const UserListPage: React.FC = () => {
   const userOnClickHandler = (user: User) => {
 
     if(socketContext.socketObjects.stompClient) {
+      console.log("TEST");
       console.log("authToken", authToken);
       const header = {"Authorization": authToken};
       
